@@ -1,57 +1,22 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const catsRouter = require('./routes/cats');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/catcafe', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch((err) => console.error('MongoDB connection error:', err));
+mongoose.connect('mongodb://localhost:27017/catcafe')
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error(err));
 
-// Cat Schema & Model
-const catSchema = new mongoose.Schema({
-  name: String,
-  breed: String,
-  age: Number,
-  description: String,
-  photoUrl: String,
-});
+app.use('/cats', catsRouter);
 
-const Cat = mongoose.model('Cat', catSchema);
-
-// Routes
 app.get('/', (req, res) => {
   res.send('Welcome to the Cat Cafe API');
-});
-
-// Get all cats
-app.get('/cats', async (req, res) => {
-  try {
-    const cats = await Cat.find();
-    res.json(cats);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
-
-// Add a new cat
-app.post('/cats', async (req, res) => {
-  const cat = new Cat(req.body);
-  try {
-    const newCat = await cat.save();
-    res.status(201).json(newCat);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
 });
 
 app.listen(PORT, () => {
