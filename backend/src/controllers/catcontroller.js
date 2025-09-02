@@ -46,6 +46,7 @@ class CatController {
       next(error);
     }
   }
+
 }
 
 module.exports = new CatController();
