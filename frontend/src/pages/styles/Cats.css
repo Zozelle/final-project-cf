@@ -80,3 +80,17 @@
     font-size: 1.1rem;
     color: #4a2b11;
 }
+
+.cat-info-card.no-cats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    min-height: 160px;
+    background: #f1cba5;
+    border: 1.5px solid #c68e3f;
+    border-radius: 18px;
+    color: #5e3a11;
+    font-size: 1.2rem;
+    box-shadow: 3px 3px 12px rgba(139, 93, 31, 0.18);
+}
