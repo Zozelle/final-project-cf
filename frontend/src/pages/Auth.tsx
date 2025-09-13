@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import AdminLogin from '../components/AdminLogin';
 import '../components/styles/Auth.css';
 
 const Auth: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
+    const [isAdminLogin, setIsAdminLogin] = useState(false)
     const [user, setUser] = useState<null | { email: string }>(null);
 
     const handleLoginSuccess = () => {
@@ -44,24 +46,44 @@ const Auth: React.FC = () => {
     return (
         <div className="auth-page">
             <div className="auth-form">
-                <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
-                {isLogin ? (
+                {!isAdminLogin ? (
                     <>
-                        <LoginForm onLoginSuccess={handleLoginSuccess} />
+                        <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
+                        {isLogin ? (
+                            <>
+                                <LoginForm onLoginSuccess={handleLoginSuccess} />
+                                <p className="auth-prompt">
+                                    Are you new here?{' '}
+                                    <span className="auth-prompt-link" onClick={() => setIsLogin(false)}>
+                                        Sign Up
+                                    </span>
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <RegisterForm onSignUpSuccess={handleSignUpSuccess} />
+                                <p className="auth-prompt">
+                                    Already have an account?{' '}
+                                    <span className="auth-prompt-link" onClick={() => setIsLogin(true)}>
+                                        Log In
+                                    </span>
+                                </p>
+                            </>
+                        )}
                         <p className="auth-prompt">
-                            Are you new here?{' '}
-                            <span className="auth-prompt-link" onClick={() => setIsLogin(false)}>
-                                Sign Up
+                            <span className="auth-prompt-link" onClick={() => setIsAdminLogin(true)}>
+                                Login as Administrator
                             </span>
                         </p>
                     </>
                 ) : (
                     <>
-                        <RegisterForm onSignUpSuccess={handleSignUpSuccess} />
+                        <h2>Login as Administrator</h2>
+                        <AdminLogin onLoginSuccess={handleLoginSuccess} />
                         <p className="auth-prompt">
-                            Already have an account?{' '}
-                            <span className="auth-prompt-link" onClick={() => setIsLogin(true)}>
-                                Log In
+                            Back to{' '}
+                            <span className="auth-prompt-link" onClick={() => setIsAdminLogin(false)}>
+                                User Login
                             </span>
                         </p>
                     </>
