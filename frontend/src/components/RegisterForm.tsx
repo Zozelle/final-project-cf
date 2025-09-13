@@ -19,7 +19,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSignUpSuccess }) => {
             return;
         }
         try {
-            // Replace with your signup API endpoint
             const res = await fetch('/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -27,40 +26,43 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSignUpSuccess }) => {
             });
             if (!res.ok) throw new Error('Sign up failed');
             onSignUpSuccess();
-        } catch (err) {
+        } catch {
             setError('Sign up failed: Please try again.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>Email:</label>
-            <input
-                type="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                autoComplete="email"
-            />
-
-            <label>Password:</label>
-            <input
-                type="password"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                autoComplete="new-password"
-            />
-
-            <label>Confirm Password:</label>
-            <input
-                type="password"
-                required
-                value={confirmPass}
-                onChange={e => setConfirmPass(e.target.value)}
-                autoComplete="new-password"
-            />
-
+            <div className="form-group">
+                <label>Email:</label>
+                <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="email"
+                />
+            </div>
+            <div className="form-group">
+                <label>Password:</label>
+                <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="new-password"
+                />
+            </div>
+            <div className="form-group">
+                <label>Confirm Password:</label>
+                <input
+                    type="password"
+                    required
+                    value={confirmPass}
+                    onChange={e => setConfirmPass(e.target.value)}
+                    autoComplete="new-password"
+                />
+            </div>
             <button type="submit">Sign Up</button>
             {error && <p className="auth-error">{error}</p>}
         </form>

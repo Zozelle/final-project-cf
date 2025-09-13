@@ -45,7 +45,6 @@ const Auth: React.FC = () => {
         <div className="auth-page">
             <div className="auth-form">
                 <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
-
                 {isLogin ? (
                     <>
                         <LoginForm onLoginSuccess={handleLoginSuccess} />

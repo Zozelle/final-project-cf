@@ -13,9 +13,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError('');
-
         try {
-            // Replace with your login API endpoint
             const res = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -23,31 +21,33 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             });
             if (!res.ok) throw new Error('Invalid credentials');
             onLoginSuccess();
-        } catch (err) {
+        } catch {
             setError('Login failed: Invalid email or password.');
         }
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <label>Email:</label>
-            <input
-                type="email"
-                required
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                autoComplete="username"
-            />
-
-            <label>Password:</label>
-            <input
-                type="password"
-                required
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                autoComplete="current-password"
-            />
-
+            <div className="form-group">
+                <label>Email:</label>
+                <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    autoComplete="username"
+                />
+            </div>
+            <div className="form-group">
+                <label>Password:</label>
+                <input
+                    type="password"
+                    required
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                />
+            </div>
             <button type="submit">Log In</button>
             {error && <p className="auth-error">{error}</p>}
         </form>
