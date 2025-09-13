@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './styles/Reservation.css';
+import { useAuth } from '../context/useAuth';
 
 type Booking = {
     date: string;
@@ -14,6 +15,8 @@ const TIMESLOTS = [
 ];
 
 const ReservationPage: React.FC = () => {
+    const { isAuthenticated } = useAuth();
+
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [people, setPeople] = useState(1);
@@ -21,11 +24,22 @@ const ReservationPage: React.FC = () => {
     const [status, setStatus] = useState('');
 
     useEffect(() => {
-        // Replace with your API call!
+        if (!isAuthenticated) return;  // don't fetch for guests
         fetch('/api/reservations')
             .then(res => res.json())
             .then(data => setBookings(data));
-    }, []);
+    }, [isAuthenticated]);
+
+    if (!isAuthenticated) {
+        return (
+            <div className="reservation-page">
+                <h2 className="reservation-title">Please log in to book a visit</h2>
+                <p className="login-prompt">
+                    You must be logged in to make a reservation. Please <a href="/login">log in</a>.
+                </p>
+            </div>
+        );
+    }
 
     const bookedTimes = bookings
         .filter(b => b.date === date)
@@ -33,11 +47,10 @@ const ReservationPage: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Replace with your API booking call
         const res = await fetch('/api/reservations', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ date, time, people })
+            body: JSON.stringify({ date, time, people }),
         });
         if (res.ok) {
             setStatus('Reservation successful!');
@@ -73,11 +86,7 @@ const ReservationPage: React.FC = () => {
                     >
                         <option value="">Select a time</option>
                         {TIMESLOTS.map(slot =>
-                            <option
-                                value={slot}
-                                key={slot}
-                                disabled={bookedTimes.includes(slot)}
-                            >
+                            <option key={slot} value={slot} disabled={bookedTimes.includes(slot)}>
                                 {slot} {bookedTimes.includes(slot) ? "(Booked)" : ""}
                             </option>
                         )}
