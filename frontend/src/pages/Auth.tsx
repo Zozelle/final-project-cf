@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import '../components/styles/Auth.css';
 
 const Auth: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
@@ -42,32 +43,17 @@ const Auth: React.FC = () => {
 
     return (
         <div className="auth-page">
-            <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-                <button
-                    style={{ marginRight: '10px', padding: '8px 16px' }}
-                    onClick={() => setIsLogin(true)}
-                    disabled={isLogin}
-                >
-                    Login
-                </button>
-                <button
-                    style={{ padding: '8px 16px' }}
-                    onClick={() => setIsLogin(false)}
-                    disabled={!isLogin}
-                >
-                    Register
-                </button>
-            </div>
-
             <div className="auth-form">
+                <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
+
                 {isLogin ? (
                     <>
                         <LoginForm onLoginSuccess={handleLoginSuccess} />
                         <p className="auth-prompt">
                             Are you new here?{' '}
                             <span className="auth-prompt-link" onClick={() => setIsLogin(false)}>
-                Sign Up
-              </span>
+                                Sign Up
+                            </span>
                         </p>
                     </>
                 ) : (
@@ -76,8 +62,8 @@ const Auth: React.FC = () => {
                         <p className="auth-prompt">
                             Already have an account?{' '}
                             <span className="auth-prompt-link" onClick={() => setIsLogin(true)}>
-                Log In
-              </span>
+                                Log In
+                            </span>
                         </p>
                     </>
                 )}

@@ -1,5 +1,6 @@
 .auth-page {
     min-height: 100vh;
+    height: 100vh;
     width: 100vw;
     display: flex;
     flex-direction: column;
@@ -23,8 +24,11 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 18px;
-    margin-bottom: 36px;
+}
+
+.auth-form h2 {
+    margin-bottom: 18px;
+    text-align: center;
 }
 
 .auth-form label {
@@ -53,6 +57,7 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.25s;
+    margin-top: 12px;
 }
 
 .auth-form button:hover {
@@ -68,7 +73,7 @@
 .auth-prompt {
     font-size: 1rem;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 18px;
     color: #4a2b11;
     user-select: none;
 }
@@ -82,4 +87,9 @@
 
 .auth-prompt-link:hover {
     color: #a9702c;
+}
+
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
 }

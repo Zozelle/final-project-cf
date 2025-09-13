@@ -20,7 +20,6 @@ const App: React.FC = () => {
                     <Route path="/reservation" element={<Reservation />} />
                     <Route path="/menu" element={<Menu />} />
                     <Route path="/login" element={<Auth />} />
-                    {/* Add signup route if separate */}
                 </Routes>
                 <Footer />
             </Router>
