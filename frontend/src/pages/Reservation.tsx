@@ -1,13 +1,109 @@
-// src/pages/Reservation.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import './styles/Reservation.css';
 
-const Reservation: React.FC = () => {
+type Booking = {
+    date: string;
+    time: string;
+    people: number;
+};
+
+const TIMESLOTS = [
+    "10:00", "11:00", "12:00",
+    "13:00", "14:00", "15:00",
+    "16:00", "17:00"
+];
+
+const ReservationPage: React.FC = () => {
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [people, setPeople] = useState(1);
+    const [bookings, setBookings] = useState<Booking[]>([]);
+    const [status, setStatus] = useState('');
+
+    useEffect(() => {
+        // Replace with your API call!
+        fetch('/api/reservations')
+            .then(res => res.json())
+            .then(data => setBookings(data));
+    }, []);
+
+    const bookedTimes = bookings
+        .filter(b => b.date === date)
+        .map(b => b.time);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        // Replace with your API booking call
+        const res = await fetch('/api/reservations', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ date, time, people })
+        });
+        if (res.ok) {
+            setStatus('Reservation successful!');
+            setBookings([...bookings, { date, time, people }]);
+            setTime('');
+            setPeople(1);
+        } else {
+            setStatus('Sorry, could not book — please try another slot.');
+        }
+    };
+
     return (
-        <div>
-            <h1>Reservation</h1>
-            <p>This page will allow users to book visits to the cat cafe.</p>
+        <div className="reservation-page">
+            <h2 className="reservation-title">Visit us!</h2>
+            <form className="reservation-form" onSubmit={handleSubmit}>
+                <label>
+                    Choose a date:
+                    <input
+                        type="date"
+                        value={date}
+                        required
+                        onChange={e => setDate(e.target.value)}
+                        min={new Date().toISOString().split('T')[0]}
+                    />
+                </label>
+                <label>
+                    Choose a time:
+                    <select
+                        value={time}
+                        required
+                        onChange={e => setTime(e.target.value)}
+                        disabled={!date}
+                    >
+                        <option value="">Select a time</option>
+                        {TIMESLOTS.map(slot =>
+                            <option
+                                value={slot}
+                                key={slot}
+                                disabled={bookedTimes.includes(slot)}
+                            >
+                                {slot} {bookedTimes.includes(slot) ? "(Booked)" : ""}
+                            </option>
+                        )}
+                    </select>
+                </label>
+                <label>
+                    Number of people:
+                    <select
+                        value={people}
+                        onChange={e => setPeople(Number(e.target.value))}
+                        required
+                    >
+                        {[...Array(6)].map((_, i) => (
+                            <option key={i + 1} value={i + 1}>
+                                {i + 1}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+                <button type="submit" disabled={!date || !time}>
+                    Book Now
+                </button>
+            </form>
+            {status && <p className="res-status">{status}</p>}
         </div>
     );
 };
 
-export default Reservation;
+export default ReservationPage;

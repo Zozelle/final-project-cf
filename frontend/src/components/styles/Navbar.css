@@ -46,17 +46,3 @@
     background: rgba(216, 169, 121, 0.30);
     color: #fff3e0;
 }
-
-@media (max-width: 700px) {
-    .home-navbar-ul {
-        gap: 14px;
-        flex-wrap: wrap;
-        padding: 10px 0 7px 0;
-    }
-
-    .home-navbar-link {
-        font-size: 1rem;
-        padding: 6px 0;
-    }
-}
-
