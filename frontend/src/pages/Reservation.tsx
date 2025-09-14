@@ -14,7 +14,7 @@ const Reservation: React.FC = () => {
         const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
         fetch('/reservations', { headers })
             .then(res => res.json())
-            .then(data => setBookings(data))
+            .then(data => setBookings(Array.isArray(data) ? data : data.reservations ?? []))
             .catch(() => setBookings([]));
     }, [isAuthenticated, token]);
 
