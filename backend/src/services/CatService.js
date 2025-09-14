@@ -1,5 +1,5 @@
 const catDao = require('../daos/CatDao');
-const CatDTO = require('../dtos/CatDto');
+const CatDTO = require('../dtos/CatDTO');
 
 class CatService {
   // Create a new cat
