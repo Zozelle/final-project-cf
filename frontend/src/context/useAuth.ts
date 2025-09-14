@@ -8,3 +8,7 @@ export const useAuth = () => {
     }
     return context;
 };
+export const useIsAdmin = () => {
+    const { isAdmin } = useAuth();
+    return isAdmin;
+};

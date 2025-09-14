@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Reservation.css';
-
-type Booking = {
-    id?: string;
-    date: string;
-    time: string;
-    people: number;
-};
+import type { Booking } from '../types/Booking';
 
 type ReservationFormProps = {
     booking?: Booking;
-    onSave: (booking: Booking) => Promise<void> | void;
+    onSave: (booking: Booking) => Promise<{ success: boolean; message: string }>;
     onCancel?: () => void;
     existingBookings?: Booking[];
 };
@@ -54,8 +48,14 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             time,
             people,
         };
-        await onSave(bookingData);
-        setStatus('');
+        const result = await onSave(bookingData);
+        setStatus(result.message);
+
+        if (result.success && !booking) {
+            setDate('');
+            setTime('');
+            setPeople(1);
+        }
     };
 
     return (

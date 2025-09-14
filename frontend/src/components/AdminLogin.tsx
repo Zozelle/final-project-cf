@@ -24,8 +24,8 @@ const AdminLogin: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
             });
             if (!res.ok) throw new Error('Invalid credentials');
             const data = await res.json();
-            const token = data.token;
-            login(token);
+            const { token, user } = data;
+            login({ token, user });
             onLoginSuccess?.();
         } catch {
             setError('Login failed: Invalid email or password.');

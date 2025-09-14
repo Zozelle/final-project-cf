@@ -2,18 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/useAuth';
 import ReservationForm from '../components/ReservationForm';
 import '../styles/Reservation.css';
-
-type Booking = {
-    id: string;
-    date: string;
-    time: string;
-    people: number;
-};
+import type { Booking } from '../types/Booking';
 
 const Reservation: React.FC = () => {
-    const { isAuthenticated, token } = useAuth();
-    const isAdmin = false;
-
+    const { isAuthenticated, token, isAdmin } = useAuth();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
 
@@ -39,9 +31,8 @@ const Reservation: React.FC = () => {
         );
     }
 
-    // Admin editing handlers
-
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id?: string) => {
+        if (!id) return;
         if (!window.confirm("Are you sure you want to delete this reservation?")) return;
         const res = await fetch(`/reservations/${id}`, {
             method: 'DELETE',
@@ -59,8 +50,8 @@ const Reservation: React.FC = () => {
         setEditingBooking(booking);
     };
 
-    const handleSave = async (booking: Booking) => {
-        if (editingBooking) {
+    const handleSave = async (booking: Booking): Promise<{ success: boolean; message: string }> => {
+        if (booking.id) {
             const res = await fetch(`/reservations/${booking.id}`, {
                 method: 'PUT',
                 headers: {
@@ -69,11 +60,14 @@ const Reservation: React.FC = () => {
                 },
                 body: JSON.stringify(booking),
             });
+
             if (res.ok) {
                 setBookings(bookings.map(b => b.id === booking.id ? booking : b));
                 setEditingBooking(null);
+                return { success: true, message: 'Reservation updated successfully' };
             } else {
-                alert('Failed to update reservation.');
+                const data = await res.json().catch(() => ({}));
+                return { success: false, message: data.message || 'Failed to update reservation.' };
             }
         } else {
             // Add new reservation
@@ -85,11 +79,15 @@ const Reservation: React.FC = () => {
                 },
                 body: JSON.stringify(booking),
             });
+
+            const data = await res.json().catch(() => ({}));
             if (res.ok) {
-                const newBooking = await res.json();
+                const newBooking = data.reservation || data;
                 setBookings([...bookings, newBooking]);
+                setEditingBooking(null);
+                return { success: true, message: data.message || 'Reservation sent successfully' };
             } else {
-                alert('Failed to add reservation.');
+                return { success: false, message: data.message || 'Failed to add reservation.' };
             }
         }
     };
@@ -104,7 +102,10 @@ const Reservation: React.FC = () => {
 
             {isAdmin ? (
                 <>
-                    <button onClick={() => setEditingBooking(null)} style={{ marginBottom: '12px' }}>
+                    <button
+                        onClick={() => setEditingBooking({ date: '', time: '', people: 1 })}
+                        style={{ marginBottom: '12px' }}
+                    >
                         + Add New Reservation
                     </button>
 
@@ -120,7 +121,7 @@ const Reservation: React.FC = () => {
                     <div className="admin-booking-list">
                         {bookings.length === 0 && <p>No reservations found.</p>}
                         {bookings.map(b => (
-                            <div key={b.id} className="booking-item">
+                            <div key={b.id || `${b.date}-${b.time}-${b.people}`} className="booking-item">
                                 <span>{b.date} at {b.time} - {b.people} {b.people === 1 ? 'person' : 'people'}</span>
                                 <button onClick={() => handleEdit(b)}>Edit</button>
                                 <button onClick={() => handleDelete(b.id)}>Delete</button>
