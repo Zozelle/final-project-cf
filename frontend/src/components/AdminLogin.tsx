@@ -15,7 +15,7 @@ const AdminLogin: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
         e.preventDefault();
         setError('');
         try {
-            const res = await fetch('/api/login', {
+            const res = await fetch('/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),

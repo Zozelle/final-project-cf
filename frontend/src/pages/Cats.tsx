@@ -24,7 +24,7 @@ const Cats: React.FC = () => {
     const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
-        fetch('/api/cats')
+        fetch('/cats')
             .then(resp => resp.json())
             .then(data => {
                 setCats(data);
@@ -38,7 +38,7 @@ const Cats: React.FC = () => {
 
     const handleDelete = async (catId: string) => {
         if (!window.confirm('Are you sure you want to delete this cat?')) return;
-        const resp = await fetch(`/api/cats/${catId}`, { method: 'DELETE' });
+        const resp = await fetch(`/cats/${catId}`, { method: 'DELETE' });
         if (resp.ok) {
             const updatedCats = cats.filter(c => c.id !== catId);
             setCats(updatedCats);
@@ -70,7 +70,7 @@ const Cats: React.FC = () => {
 
     const handleSave = async (catData: Cat) => {
         if (isAdding) {
-            const resp = await fetch('/api/cats', {
+            const resp = await fetch('/cats', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(catData),
@@ -84,7 +84,7 @@ const Cats: React.FC = () => {
                 alert('Failed to add cat.');
             }
         } else {
-            const resp = await fetch(`/api/cats/${catData.id}`, {
+            const resp = await fetch(`/cats/${catData.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(catData),
