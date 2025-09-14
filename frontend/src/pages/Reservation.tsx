@@ -51,10 +51,7 @@ const Reservation: React.FC = () => {
     };
 
     const handleSave = async (booking: Booking): Promise<{ success: boolean; message: string }> => {
-        if (editingBooking) {
-            if (!booking.id) {
-                return { success: false, message: 'Booking ID is required' };
-            }
+        if (booking.id) {
             const res = await fetch(`/reservations/${booking.id}`, {
                 method: 'PUT',
                 headers: {
@@ -87,6 +84,7 @@ const Reservation: React.FC = () => {
             if (res.ok) {
                 const newBooking = data.reservation || data;
                 setBookings([...bookings, newBooking]);
+                setEditingBooking(null);
                 return { success: true, message: data.message || 'Reservation sent successfully' };
             } else {
                 return { success: false, message: data.message || 'Failed to add reservation.' };
@@ -104,7 +102,10 @@ const Reservation: React.FC = () => {
 
             {isAdmin ? (
                 <>
-                    <button onClick={() => setEditingBooking(null)} style={{ marginBottom: '12px' }}>
+                    <button
+                        onClick={() => setEditingBooking({ date: '', time: '', people: 1 })}
+                        style={{ marginBottom: '12px' }}
+                    >
                         + Add New Reservation
                     </button>
 
