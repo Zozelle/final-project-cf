@@ -6,6 +6,7 @@ interface RegisterFormProps {
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onSignUpSuccess }) => {
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPass, setConfirmPass] = useState('');
@@ -33,6 +34,16 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSignUpSuccess }) => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <div className="form-group">
+                <label>Username:</label>
+                <input
+                    type="username"
+                    required
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    autoComplete="email"
+                />
+            </div>
             <div className="form-group">
                 <label>Email:</label>
                 <input
