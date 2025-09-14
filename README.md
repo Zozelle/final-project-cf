@@ -1,70 +1,57 @@
-Εφαρμογή “Cat Cafe” με Node/Express backend και React/Vite frontend. Το backend χειρίζεται χρήστες, γάτες και κρατήσεις, ενώ το frontend παρέχει SPA πλοήγηση.
+# Cat Café
 
-Προαπαιτούμενα:
-Node.js & npm
+A Node/Express backend with a React/Vite frontend. The backend manages users, cats and reservations while the frontend provides SPA navigation.
 
-MongoDB (τοπική εγκατάσταση ή διαθέσιμο instance)
+## Backend
 
-Προαιρετικά: nodemon για ανάπτυξη backend
-
-Δομή έργου:
-backend/   -> API (Express, MongoDB)
-frontend/  -> Πελάτης (React, Vite, TypeScript)
-Ρύθμιση Backend
-Εγκατάσταση
-
+```bash
 cd backend
 npm install
-Μεταβλητές περιβάλλοντος
-Δημιουργήστε αρχείο .env με:
+```
 
-JWT_SECRET=<μυστικό JWT>
-PORT=3000        # προεπιλογή 3000
-Το JWT μυστικό απαιτείται για έλεγχο ταυτότητας
-Το port μπορεί να παρακαμφθεί μέσω PORT
+Create a `.env` file with:
 
-Βάση δεδομένων
-Η σύνδεση γίνεται στο mongodb://localhost:27017/catCafeDB—προσαρμόστε τη διεύθυνση στο src/db.js αν χρειάζεται
+```
+JWT_SECRET=<your jwt secret>
+PORT=3000 # optional
+```
 
-Μετατροπές σχήματος (προαιρετικό)
+Development:
 
-npm run migrate:cat-image-url
-```​:codex-file-citation[codex-file-citation]{line_range_start=6 line_range_end=10 path=backend/package.json git_url="https://github.com/Zozelle/final-project-cf/blob/main/backend/package.json#L6-L10"}​
-Ανάπτυξη
-
+```
 npm run dev
-Εκκινεί τον server με nodemon
+```
 
-Production
+Production:
 
+```
 npm start
-Εκτελεί node src/server.js για σταθερή λειτουργία
+```
 
-Ρύθμιση Frontend
-Εγκατάσταση
+## Frontend
 
+```bash
 cd frontend
 npm install
-Ανάπτυξη
+```
 
+Development:
+
+```
 npm run dev
-Εκκινεί Vite development server
+```
 
-Build
+Build:
 
+```
 npm run build
-Εκτελεί TypeScript build και δημιουργεί παραγωγικό bundle στο dist/
+```
 
-Προεπισκόπηση
+Configure the API base URL via `VITE_API_URL`.
 
-npm run preview
-Εξυπηρετεί το παραγόμενο dist/ τοπικά για έλεγχο πριν το deploy
+## Deployment Checklist
 
-Deploy
-Βεβαιωθείτε ότι η MongoDB είναι διαθέσιμη και ότι οι μεταβλητές περιβάλλοντος έχουν ρυθμιστεί.
-
-Εκτελέστε npm run build στο frontend και ανεβάστε τον φάκελο dist/ σε οποιονδήποτε static web server (Nginx, AWS S3 κ.λπ.).
-
-Στο backend, εκτελέστε npm start (κατά προτίμηση μέσω process manager όπως pm2).
-
-Ρυθμίστε το frontend ώστε να καλεί το API του backend (π.χ. μέσω μεταβλητής περιβάλλοντος VITE_API_URL).
+- In `frontend`, run `npm run build` and serve the generated `dist/` folder with a static web server (e.g. Nginx).
+- Set `VITE_API_URL` so the frontend calls the backend API.
+- In `backend`, create `.env` with `JWT_SECRET` (and `PORT` if needed) and install dependencies with `npm install`.
+- Start the backend with `npm start` under a process manager and ensure MongoDB is accessible.
