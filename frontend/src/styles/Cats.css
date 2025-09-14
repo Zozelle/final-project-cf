@@ -1,0 +1,217 @@
+.cats-page {
+    min-height: 100vh;
+    width: 100vw;
+    background: #f3d3a6;
+    color: #4a2b11;
+    font-family: 'Playfair Display', serif;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
+.cats-title {
+    position: sticky;
+    top: 128px;
+    background: #f3d3a6;
+    z-index: 10;
+    padding: 8px 0;
+    margin: 0 auto 32px auto;
+    width: fit-content;
+    color: #5e3a11;
+}
+
+.cats-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 64px;
+    width: 100%;
+    height: 100%;
+}
+
+.cats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.cat-selector {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    color: #5e3a11;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 10px 16px;
+    border-radius: 50px;
+    transition: background 0.2s;
+}
+
+.cat-selector.active,
+.cat-selector:hover {
+    background: rgba(198, 142, 63, 0.29);
+}
+
+.add-cat-button {
+    padding: 10px 16px;
+    border-radius: 50px;
+    border: 2px dashed #c68e3f;
+    background: transparent;
+    color: #5e3a11;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    text-align: center;
+}
+
+.add-cat-button:hover {
+    background: rgba(198, 142, 63, 0.29);
+    color: #3a260a;
+}
+
+.cat-info-card {
+    background: #f1cba5;
+    border: 1.5px solid #c68e3f;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: row;
+    padding: 32px;
+    width: 400px;
+    gap: 36px;
+}
+
+.cat-image img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 18px;
+    background: #f3d3a6;
+}
+
+.cat-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 1.1rem;
+    color: #4a2b11;
+}
+
+.cat-info-card.no-cats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 300px;
+    min-height: 160px;
+    background: #f1cba5;
+    border: 1.5px solid #c68e3f;
+    border-radius: 18px;
+    color: #5e3a11;
+    font-size: 1.2rem;
+    box-shadow: 3px 3px 12px rgba(139, 93, 31, 0.18);
+}
+
+/* Cat Editor Form Styles (Compact) */
+
+.cat-editor-form {
+    background: #f1cba5;
+    border: 1.5px solid #c68e3f;
+    border-radius: 18px;
+    padding: 18px 18px;
+    margin-right: 50px;
+    width: 500px;
+    min-width: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.04rem;
+    color: #4a2b11;
+}
+
+.cat-editor-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    gap: 3px;
+    margin-bottom: 3px;
+}
+
+.cat-editor-form input {
+    padding: 7px 9px;
+    border-radius: 7px;
+    border: 1.5px solid #c68e3f;
+    font-size: 0.97rem;
+    font-family: 'Playfair Display', serif;
+    color: #4a2b11;
+    background: #f3d3a6;
+    box-sizing: border-box;
+}
+
+.editor-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 7px;
+    margin-top: 6px;
+}
+
+.cat-editor-form button {
+    padding: 6px 12px;
+    font-size: 1rem;
+    background: #b87f3a;
+    border: none;
+    border-radius: 8px;
+    color: #fff3e0;
+    cursor: pointer;
+    transition: background 0.25s;
+}
+
+.cat-editor-form button:hover {
+    background: #a9702c;
+}
+
+.cat-editor-form button[type="button"] {
+    background: #c68e3f;
+    color: #4a2b11;
+}
+
+.cat-editor-form button[type="button"]:hover {
+    background: #a06126;
+}
+
+/* Admin Action Buttons inside CatCard */
+
+.admin-action-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+}
+
+.admin-action-buttons button {
+    background: #b87f3a;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 1rem;
+    color: #fff3e0;
+    cursor: pointer;
+    transition: background 0.25s;
+}
+
+.admin-action-buttons button:hover {
+    background: #a9702c;
+}
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.form-row label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './styles/Reservation.css';
+import '../styles/Reservation.css';
 import { useAuth } from '../context/useAuth';
 
 type Booking = {

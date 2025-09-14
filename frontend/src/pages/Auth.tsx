@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import AdminLogin from '../components/AdminLogin';
-import '../components/styles/Auth.css';
+import '../styles/Auth.css';
 
 const Auth: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);

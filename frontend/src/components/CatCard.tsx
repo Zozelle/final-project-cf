@@ -1,5 +1,5 @@
 import React from 'react';
-import '../pages/styles/Cats.css'
+import '../styles/Cats.css';
 
 type Cat = {
     id: string;
@@ -14,9 +14,12 @@ type Cat = {
 
 interface CatCardProps {
     cat: Cat;
+    isAdmin?: boolean;
+    onEdit?: () => void;
+    onDelete?: () => void;
 }
 
-const CatCard: React.FC<CatCardProps> = ({ cat }) => {
+const CatCard: React.FC<CatCardProps> = ({ cat, isAdmin = false, onEdit, onDelete }) => {
     return (
         <div className="cat-info-card">
             <div className="cat-image">
@@ -29,6 +32,12 @@ const CatCard: React.FC<CatCardProps> = ({ cat }) => {
                 <div><strong>Favorite games:</strong> {cat.favoriteGames}</div>
                 <div><strong>Specialty:</strong> {cat.specialty}</div>
                 <div><strong>Likes:</strong> {cat.likes}</div>
+                {isAdmin && (
+                    <div className="admin-action-buttons">
+                        <button onClick={onEdit}>Edit</button>
+                        <button onClick={onDelete}>Delete</button>
+                    </div>
+                )}
             </div>
         </div>
     );
