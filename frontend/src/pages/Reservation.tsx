@@ -19,7 +19,7 @@ const Reservation: React.FC = () => {
 
     useEffect(() => {
         if (!isAuthenticated) return;
-        fetch('/api/reservations')
+        fetch('/reservations')
             .then(res => res.json())
             .then(data => setBookings(data))
             .catch(() => setBookings([]));
@@ -42,7 +42,7 @@ const Reservation: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this reservation?")) return;
-        const res = await fetch(`/api/reservations/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/reservations/${id}`, { method: 'DELETE' });
         if (res.ok) {
             setBookings(bookings.filter(b => b.id !== id));
             if (editingBooking?.id === id) setEditingBooking(null);
@@ -57,7 +57,7 @@ const Reservation: React.FC = () => {
 
     const handleSave = async (booking: Booking) => {
         if (editingBooking) {
-            const res = await fetch(`/api/reservations/${booking.id}`, {
+            const res = await fetch(`/reservations/${booking.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(booking),
@@ -70,7 +70,7 @@ const Reservation: React.FC = () => {
             }
         } else {
             // Add new reservation
-            const res = await fetch('/api/reservations', {
+            const res = await fetch('/reservations', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(booking),
