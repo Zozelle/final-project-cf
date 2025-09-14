@@ -18,7 +18,7 @@ async getAllCats() {
 }
 
   // Update cat by ID with new data
-  async updatCat(id, updateData) {
+  async updateCat(id, updateData) {
     return Cat.findByIdAndUpdate(id, updateData, { new: true }).exec();
   }
 

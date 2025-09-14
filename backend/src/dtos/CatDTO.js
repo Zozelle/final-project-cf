@@ -1,5 +1,7 @@
+const path = require('path');
+
 class CatDTO {
-  
+
     constructor(cat) {
     this.id = cat._id;
     this.name = cat.name;
@@ -7,10 +9,12 @@ class CatDTO {
     this.color = cat.color;
     this.favoriteGames = cat.favoriteGames;
     this.specialty = cat.specialty;
-    this.likes = cat.likes
-    this.photoUrl = cat.photoUrl;
+    this.likes = cat.likes;
+    if (cat.imageUrl) {
+      this.imageUrl = `/images/${path.basename(cat.imageUrl)}`;
+    }
   }
-  
+
 }
 
 module.exports = CatDTO;

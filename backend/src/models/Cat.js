@@ -7,7 +7,7 @@ const catSchema = new mongoose.Schema({
   favoriteGames: {type: String },
   specialty: {type: String },
   likes: { type: String },
-  photoUrl: { type: String }
+  imageUrl: { type: String }
 });
 
 module.exports = mongoose.model('Cat', catSchema);
