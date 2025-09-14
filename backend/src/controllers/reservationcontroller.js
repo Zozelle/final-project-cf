@@ -5,11 +5,19 @@ class ReservationController {
   // Create a reservation
   async createReservation(req, res, next) {
     try {
-      const reservationData = { ...req.body, userId: req.user.id };
+            const reservationData = { ...req.body, userId: req.user.id };
       const reservation = await reservationService.createReservation(reservationData);
-      res.status(201).json(reservation);
+      res
+        .status(201)
+        .json({ message: 'Reservation booked successfully', reservation });
     } catch (error) {
-      next(error);
+      if (error.message === 'Reservation already confirmed') {
+        res
+          .status(409)
+          .json({ message: 'A reservation already exists for this date and time' });
+      } else {
+        next(error);
+      }
     }
   }
 
