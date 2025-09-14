@@ -6,7 +6,6 @@ const authenticateJWT = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Create a new reservation
 router.post(
   '/',
   authenticateJWT,
@@ -17,13 +16,10 @@ router.post(
   reservationController.createReservation
 );
 
-// Get reservation by ID
 router.get('/:id', authenticateJWT, reservationController.getReservationById);
 
-// Get all reservations for a specific user
 router.get('/user/:userId', authenticateJWT, reservationController.getReservationsByUser);
 
-// Update reservation by ID 
 router.put(
   '/:id',
   authenticateJWT,
@@ -33,7 +29,6 @@ router.put(
   reservationController.updateReservation
 );
 
-// Delete reservation by ID 
 router.delete('/:id', authenticateJWT, reservationController.deleteReservation);
 
 module.exports = router;

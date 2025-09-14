@@ -3,9 +3,11 @@ class CatDTO {
     constructor(cat) {
     this.id = cat._id;
     this.name = cat.name;
-    this.breed = cat.breed;
     this.age = cat.age;
-    this.description = cat.description;
+    this.color = cat.color;
+    this.favoriteGames = cat.favoriteGames;
+    this.specialty = cat.specialty;
+    this.likes = cat.likes
     this.photoUrl = cat.photoUrl;
   }
   
