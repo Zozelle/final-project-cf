@@ -1,14 +1,13 @@
-Επισκόπηση
 Εφαρμογή “Cat Cafe” με Node/Express backend και React/Vite frontend. Το backend χειρίζεται χρήστες, γάτες και κρατήσεις, ενώ το frontend παρέχει SPA πλοήγηση.
 
-Προαπαιτούμενα
+Προαπαιτούμενα:
 Node.js & npm
 
 MongoDB (τοπική εγκατάσταση ή διαθέσιμο instance)
 
 Προαιρετικά: nodemon για ανάπτυξη backend
 
-Δομή έργου
+Δομή έργου:
 backend/   -> API (Express, MongoDB)
 frontend/  -> Πελάτης (React, Vite, TypeScript)
 Ρύθμιση Backend
