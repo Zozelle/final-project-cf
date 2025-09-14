@@ -2,7 +2,6 @@ const reservationService = require('../services/ReservationService');
 
 class ReservationController {
   
-  // Create a reservation
   async createReservation(req, res, next) {
     try {
             const reservationData = { ...req.body, userId: req.user.id };
@@ -21,7 +20,6 @@ class ReservationController {
     }
   }
 
-  // Get reservation by ID
   async getReservationById(req, res, next) {
     try {
       const reservation = await reservationService.getReservationById(req.params.id);
@@ -31,7 +29,6 @@ class ReservationController {
     }
   }
 
-  // Get all reservations for a specific user
   async getReservationsByUser(req, res, next) {
     try {
       const reservations = await reservationService.getReservationsByUser(req.params.userId);
@@ -41,7 +38,20 @@ class ReservationController {
     }
   }
 
-  // Update reservation by ID
+    async getAllReservations(req, res, next) {
+    try {
+      let reservations;
+      if (req.user && req.user.role === 'admin') {
+        reservations = await reservationService.getAllReservations();
+      } else {
+        reservations = await reservationService.getReservationsByUser(req.user.id);
+      }
+      res.json(reservations);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async updateReservation(req, res, next) {
     try {
       const reservation = await reservationService.updateReservation(req.params.id, req.body);
@@ -51,7 +61,6 @@ class ReservationController {
     }
   }
 
-  // Delete reservation by ID
   async deleteReservation(req, res, next) {
     try {
       const reservation = await reservationService.deleteReservation(req.params.id);
