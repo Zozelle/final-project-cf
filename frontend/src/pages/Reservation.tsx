@@ -39,8 +39,6 @@ const Reservation: React.FC = () => {
         );
     }
 
-    // Admin editing handlers
-
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this reservation?")) return;
         const res = await fetch(`/reservations/${id}`, {
@@ -59,7 +57,7 @@ const Reservation: React.FC = () => {
         setEditingBooking(booking);
     };
 
-    const handleSave = async (booking: Booking) => {
+    const handleSave = async (booking: Booking): Promise<{ success: boolean; message: string }> => {
         if (editingBooking) {
             const res = await fetch(`/reservations/${booking.id}`, {
                 method: 'PUT',
@@ -69,11 +67,14 @@ const Reservation: React.FC = () => {
                 },
                 body: JSON.stringify(booking),
             });
+
             if (res.ok) {
                 setBookings(bookings.map(b => b.id === booking.id ? booking : b));
                 setEditingBooking(null);
+                return { success: true, message: 'Reservation updated successfully' };
             } else {
-                alert('Failed to update reservation.');
+                const data = await res.json().catch(() => ({}));
+                return { success: false, message: data.message || 'Failed to update reservation.' };
             }
         } else {
             // Add new reservation
@@ -85,11 +86,14 @@ const Reservation: React.FC = () => {
                 },
                 body: JSON.stringify(booking),
             });
+
+            const data = await res.json().catch(() => ({}));
             if (res.ok) {
-                const newBooking = await res.json();
+                const newBooking = data.reservation || data;
                 setBookings([...bookings, newBooking]);
+                return { success: true, message: data.message || 'Reservation sent successfully' };
             } else {
-                alert('Failed to add reservation.');
+                return { success: false, message: data.message || 'Failed to add reservation.' };
             }
         }
     };
