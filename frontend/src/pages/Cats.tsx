@@ -15,15 +15,12 @@ type Cat = {
     imageUrl: string;
 };
 
-// Temporary admin flag; replace with real auth check as needed
-const isAdmin = false;
-
 const Cats: React.FC = () => {
     const [cats, setCats] = useState<Cat[]>([]);
     const [selectedCat, setSelectedCat] = useState<Cat | null>(null);
     const [editingCat, setEditingCat] = useState<Cat | null>(null);
     const [isAdding, setIsAdding] = useState(false);
-    const { token } = useAuth();
+    const { token, isAdmin } = useAuth();
 
     useEffect(() => {
         const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
