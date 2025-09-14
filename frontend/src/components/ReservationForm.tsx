@@ -24,7 +24,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
     const [date, setDate] = useState(booking?.date || '');
     const [time, setTime] = useState(booking?.time || '');
     const [people, setPeople] = useState(booking?.people || 1);
-    const [status, setStatus] = useState('');
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         if (booking) {
@@ -47,9 +47,10 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             date,
             time,
             people,
+            status: booking?.status,
         };
         const result = await onSave(bookingData);
-        setStatus(result.message);
+        setMessage(result.message);
 
         if (result.success && !booking) {
             setDate('');
@@ -110,7 +111,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
                     </button>
                 )}
             </div>
-            {status && <p className="res-status">{status}</p>}
+            {message && <p className="res-status">{message}</p>}
         </form>
     );
 };

@@ -50,6 +50,26 @@ const Reservation: React.FC = () => {
         setEditingBooking(booking);
     };
 
+    const handleStatusChange = async (
+        id: string,
+        status: 'confirmed' | 'cancelled'
+    ) => {
+        const res = await fetch(`/reservations/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ status }),
+        });
+        if (res.ok) {
+            const updated = await res.json().catch(() => null);
+            setBookings(bookings.map(b => (b.id === id ? updated : b)));
+        } else {
+            alert('Failed to update reservation.');
+        }
+    };
+
     const handleSave = async (booking: Booking): Promise<{ success: boolean; message: string }> => {
         if (booking.id) {
             const res = await fetch(`/reservations/${booking.id}`, {
@@ -82,6 +102,7 @@ const Reservation: React.FC = () => {
 
             const data = await res.json().catch(() => ({}));
             if (res.ok) {
+                setBookings(bookings.map(b => (b.id === booking.id ? data : b)));
                 const newBooking = data.reservation || data;
                 setBookings([...bookings, newBooking]);
                 setEditingBooking(null);
@@ -122,9 +143,21 @@ const Reservation: React.FC = () => {
                         {bookings.length === 0 && <p>No reservations found.</p>}
                         {bookings.map(b => (
                             <div key={b.id || `${b.date}-${b.time}-${b.people}`} className="booking-item">
-                                <span>{b.date} at {b.time} - {b.people} {b.people === 1 ? 'person' : 'people'}</span>
-                                <button onClick={() => handleEdit(b)}>Edit</button>
-                                <button onClick={() => handleDelete(b.id)}>Delete</button>
+                                                                <span>
+                                    {b.date} at {b.time} - {b.people} {b.people === 1 ? 'person' : 'people'} - {b.status}
+                                </span>
+                                {b.status === 'pending' && (
+                                    <>
+                                        <button onClick={() => handleStatusChange(b.id!, 'confirmed')}>Confirm</button>
+                                        <button onClick={() => handleStatusChange(b.id!, 'cancelled')}>Reject</button>
+                                    </>
+                                )}
+                                {b.status === 'confirmed' && (
+                                    <>
+                                        <button onClick={() => handleEdit(b)}>Edit</button>
+                                        <button onClick={() => handleDelete(b.id)}>Delete</button>
+                                    </>
+                                )}
                             </div>
                         ))}
                     </div>

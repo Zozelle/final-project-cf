@@ -3,4 +3,6 @@ export type Booking = {
     date: string;
     time: string;
     people: number;
+    status?: 'pending' | 'confirmed' | 'cancelled';
+
 };

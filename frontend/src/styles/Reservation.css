@@ -109,6 +109,9 @@
     box-shadow: 0 2px 18px rgba(60, 24, 8, 0.08);
     font-family: 'Playfair Display', serif;
     color: #4a2b11;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
 }
 
 .booking-item {
