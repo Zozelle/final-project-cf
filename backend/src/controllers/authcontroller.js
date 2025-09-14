@@ -7,7 +7,6 @@ const JWT_EXPIRES_IN = '1h';
 
 class AuthController {
   
-  // User registration
   async register(req, res, next) {
     try {
       const userData = req.body;

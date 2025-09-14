@@ -26,6 +26,10 @@ class ReservationDao {
   async deleteReservation(id) {
     return Reservation.findByIdAndDelete(id).exec();
   }
+
+    async getAllReservations() {
+    return Reservation.find().exec();
+  }
 }
 
 module.exports = new ReservationDao();

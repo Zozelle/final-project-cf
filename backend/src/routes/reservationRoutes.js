@@ -16,6 +16,8 @@ router.post(
   reservationController.createReservation
 );
 
+router.get('/', authenticateJWT, reservationController.getAllReservations);
+
 router.get('/:id', authenticateJWT, reservationController.getReservationById);
 
 router.get('/user/:userId', authenticateJWT, reservationController.getReservationsByUser);
