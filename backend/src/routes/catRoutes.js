@@ -7,7 +7,6 @@ const authorizeRoles = require('../middleware/roleMiddleware');
 
 const router = express.Router();
 
-// Create a new cat 
 router.post(
   '/',
   authenticateJWT,
@@ -17,14 +16,11 @@ router.post(
   validateRequest,
   catController.createCat
 );
-
-// Get all cats 
+ 
 router.get('/', catController.getAllCats);
 
-// Get cat by ID 
 router.get('/:id', catController.getCatById);
-
-// Update cat by ID 
+ 
 router.put(
   '/:id',
   authenticateJWT,
@@ -34,8 +30,12 @@ router.put(
   validateRequest,
   catController.updateCat
 );
-
-// Delete cat by ID 
-router.delete('/:id', authenticateJWT, authorizeRoles('admin'), catController.deleteCat);
+ 
+router.delete(
+  '/:id',
+  authenticateJWT,
+  authorizeRoles('admin'),
+  catController.deleteCat
+);
 
 module.exports = router;

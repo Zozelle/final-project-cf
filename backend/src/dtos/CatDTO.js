@@ -8,7 +8,7 @@ class CatDTO {
     this.favoriteGames = cat.favoriteGames;
     this.specialty = cat.specialty;
     this.likes = cat.likes
-    this.photoUrl = cat.photoUrl;
+    this.imageUrl = cat.imageUrl;
   }
   
 }
