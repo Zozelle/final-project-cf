@@ -3,6 +3,14 @@ const ReservationDTO = require('../dtos/ReservationDto');
 
 class ReservationService {
   async createReservation(reservationData) {
+    const existing = await reservationDao.findConfirmedReservation(
+      reservationData.date,
+      reservationData.time
+    );
+    if (existing) {
+      throw new Error('Reservation already confirmed');
+    }
+
     const reservation = await reservationDao.createReservation(reservationData);
     return new ReservationDTO(reservation);
   }
