@@ -37,6 +37,11 @@ class ReservationService {
     if (!reservation) throw new Error('Reservation not found');
     return new ReservationDTO(reservation);
   }
+
+    async getAllReservations() {
+    const reservations = await reservationDao.getAllReservations();
+    return reservations.map(res => new ReservationDTO(res));
+  }
 }
 
 module.exports = new ReservationService();
