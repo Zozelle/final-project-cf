@@ -1,109 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import './styles/Reservation.css';
+import { useAuth } from '../context/useAuth';
+import ReservationForm from '../components/ReservationForm';
+import '../styles/Reservation.css';
 
 type Booking = {
+    id: string;  // assuming backend provides ids for reservations
     date: string;
     time: string;
     people: number;
 };
 
-const TIMESLOTS = [
-    "10:00", "11:00", "12:00",
-    "13:00", "14:00", "15:00",
-    "16:00", "17:00"
-];
+const Reservation: React.FC = () => {
+    const { isAuthenticated, user } = useAuth();
+    const isAdmin = user?.role === 'admin';
 
-const ReservationPage: React.FC = () => {
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('');
-    const [people, setPeople] = useState(1);
     const [bookings, setBookings] = useState<Booking[]>([]);
-    const [status, setStatus] = useState('');
+    const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
 
     useEffect(() => {
-        // Replace with your API call!
+        if (!isAuthenticated) return;
         fetch('/api/reservations')
             .then(res => res.json())
-            .then(data => setBookings(data));
-    }, []);
+            .then(data => setBookings(data))
+            .catch(() => setBookings([]));
+    }, [isAuthenticated]);
 
-    const bookedTimes = bookings
-        .filter(b => b.date === date)
-        .map(b => b.time);
+    if (!isAuthenticated) {
+        return (
+            <div className="reservation-page">
+                <div className="reservation-guest-message">
+                    <h1 className="reservation-title">Please log in to book a visit</h1>
+                    <p className="login-prompt">
+                        You must be logged in to make a reservation. Please <a href="/login">log in</a>.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        // Replace with your API booking call
-        const res = await fetch('/api/reservations', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ date, time, people })
-        });
+    // Admin editing handlers
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm("Are you sure you want to delete this reservation?")) return;
+        const res = await fetch(`/api/reservations/${id}`, { method: 'DELETE' });
         if (res.ok) {
-            setStatus('Reservation successful!');
-            setBookings([...bookings, { date, time, people }]);
-            setTime('');
-            setPeople(1);
+            setBookings(bookings.filter(b => b.id !== id));
+            if (editingBooking?.id === id) setEditingBooking(null);
         } else {
-            setStatus('Sorry, could not book — please try another slot.');
+            alert("Failed to delete reservation.");
         }
+    };
+
+    const handleEdit = (booking: Booking) => {
+        setEditingBooking(booking);
+    };
+
+    const handleSave = async (booking: Booking) => {
+        if (editingBooking) {
+            const res = await fetch(`/api/reservations/${booking.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(booking),
+            });
+            if (res.ok) {
+                setBookings(bookings.map(b => b.id === booking.id ? booking : b));
+                setEditingBooking(null);
+            } else {
+                alert('Failed to update reservation.');
+            }
+        } else {
+            // Add new reservation
+            const res = await fetch('/api/reservations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(booking),
+            });
+            if (res.ok) {
+                const newBooking = await res.json();
+                setBookings([...bookings, newBooking]);
+            } else {
+                alert('Failed to add reservation.');
+            }
+        }
+    };
+
+    const handleCancel = () => {
+        setEditingBooking(null);
     };
 
     return (
         <div className="reservation-page">
-            <h2 className="reservation-title">Visit us!</h2>
-            <form className="reservation-form" onSubmit={handleSubmit}>
-                <label>
-                    Choose a date:
-                    <input
-                        type="date"
-                        value={date}
-                        required
-                        onChange={e => setDate(e.target.value)}
-                        min={new Date().toISOString().split('T')[0]}
-                    />
-                </label>
-                <label>
-                    Choose a time:
-                    <select
-                        value={time}
-                        required
-                        onChange={e => setTime(e.target.value)}
-                        disabled={!date}
-                    >
-                        <option value="">Select a time</option>
-                        {TIMESLOTS.map(slot =>
-                            <option
-                                value={slot}
-                                key={slot}
-                                disabled={bookedTimes.includes(slot)}
-                            >
-                                {slot} {bookedTimes.includes(slot) ? "(Booked)" : ""}
-                            </option>
-                        )}
-                    </select>
-                </label>
-                <label>
-                    Number of people:
-                    <select
-                        value={people}
-                        onChange={e => setPeople(Number(e.target.value))}
-                        required
-                    >
-                        {[...Array(6)].map((_, i) => (
-                            <option key={i + 1} value={i + 1}>
-                                {i + 1}
-                            </option>
+            <h2 className="reservation-title">{isAdmin ? "Manage Reservations" : "Visit us!"}</h2>
+
+            {isAdmin ? (
+                <>
+                    <button onClick={() => setEditingBooking(null)} style={{ marginBottom: '12px' }}>
+                        + Add New Reservation
+                    </button>
+
+                    {editingBooking !== null && (
+                        <ReservationForm
+                            booking={editingBooking}
+                            onSave={handleSave}
+                            onCancel={handleCancel}
+                            existingBookings={bookings}
+                        />
+                    )}
+
+                    <div className="admin-booking-list">
+                        {bookings.length === 0 && <p>No reservations found.</p>}
+                        {bookings.map(b => (
+                            <div key={b.id} className="booking-item">
+                                <span>{b.date} at {b.time} - {b.people} {b.people === 1 ? 'person' : 'people'}</span>
+                                <button onClick={() => handleEdit(b)}>Edit</button>
+                                <button onClick={() => handleDelete(b.id)}>Delete</button>
+                            </div>
                         ))}
-                    </select>
-                </label>
-                <button type="submit" disabled={!date || !time}>
-                    Book Now
-                </button>
-            </form>
-            {status && <p className="res-status">{status}</p>}
+                    </div>
+                </>
+            ) : (
+                <ReservationForm
+                    onSave={handleSave}
+                    existingBookings={bookings}
+                />
+            )}
         </div>
     );
 };
 
-export default ReservationPage;
+export default Reservation;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import './styles/Navbar.css';
+import '../styles/Navbar.css';
 
 const Navbar: React.FC = () => {
     // const isAuthenticated = false; // Placeholder, replace with auth context later

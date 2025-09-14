@@ -1,0 +1,112 @@
+.auth-page {
+    min-height: 100vh;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: url('/images/loginbg.jpg') center/cover no-repeat;
+    font-family: 'Playfair Display', serif;
+    color: #4a2b11;
+    padding: 24px 0;
+    box-sizing: border-box;
+}
+
+.auth-form {
+    background: #f1cba5;
+    border: 1.5px solid #c68e3f;
+    border-radius: 14px;
+    padding: 32px 28px;
+    max-width: 90vw;
+    width: 320px;
+    box-shadow: 3px 3px 12px rgba(139, 93, 31, 0.25);
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.auth-form h2 {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.auth-form label {
+    font-weight: 600;
+}
+
+.auth-form input {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1.5px solid #c68e3f;
+    font-size: 1rem;
+    font-family: 'Playfair Display', serif;
+    color: #fff3e0;
+    background-color: #683d18;
+}
+
+.auth-form input:focus {
+    outline-color: #c68e3f;
+}
+
+.auth-form button {
+    background: #b87f3a;
+    color: #fff3e0;
+    padding: 10px 0;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.25s;
+    width: 100%;
+    margin-top: 20px;
+    box-sizing: border-box;
+}
+
+.auth-form button:hover {
+    background: #a9702c;
+}
+
+.auth-error {
+    color: #895b3e;
+    font-weight: 600;
+    text-align: center;
+}
+
+.auth-prompt {
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 18px;
+    color: #4a2b11;
+    user-select: none;
+}
+
+.auth-prompt-link {
+    color: #b87f3a;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 700;
+}
+
+.auth-prompt-link:hover {
+    color: #a9702c;
+}
+
+button[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

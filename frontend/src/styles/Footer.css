@@ -1,0 +1,14 @@
+.site-footer {
+    background: rgba(30, 18, 11, 0.9);
+    color: #f0ecda;
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    text-align: center;
+    padding: 20px 12px;
+    font-size: 1rem;
+    border-top: 1px solid rgba(216, 169, 121, 0.18);
+    margin-top: 40px;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+}
