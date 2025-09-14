@@ -5,7 +5,6 @@ const validateRequest = require('../middleware/validationMiddleware');
 
 const router = express.Router();
 
-//Register new user
 router.post(
   '/register',
   body('email').isEmail().withMessage('Invalid email'),
@@ -14,7 +13,6 @@ router.post(
   authController.register
 );
 
-//Login user
 router.post(
   '/login',
   body('email').isEmail().withMessage('Invalid email'),
