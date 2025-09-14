@@ -18,11 +18,10 @@ class AuthController {
     }
   }
 
-  // User login
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-      const user = await userService.getUserByEmail(email);
+      const user = await userService.getUserByEmailWithPassword(email);
 
       if (!user) {
         return res.status(401).json({ message: 'Invalid email or password' });
@@ -33,12 +32,11 @@ class AuthController {
         return res.status(401).json({ message: 'Invalid email or password' });
       }
 
-      // Generate JWT token
-      const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
+           const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, {
         expiresIn: JWT_EXPIRES_IN,
       });
 
-      res.json({ token, user: { id: user.id, username: user.username, email: user.email, role: user.role } });
+       res.json({ token, user: { id: user._id, username: user.username, email: user.email, role: user.role } });
     } catch (error) {
       next(error);
     }

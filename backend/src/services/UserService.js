@@ -1,5 +1,5 @@
 const userDao = require('../daos/UserDao');
-const UserDTO = require('../dtos/UserDto');
+const UserDTO = require('../dtos/UserDTO');
 
 class UserService {
   async createUser(userData) {
@@ -16,6 +16,10 @@ class UserService {
   async getUserByEmail(email) {
     const user = await userDao.getUserByEmail(email);
     return user ? new UserDTO(user) : null;
+  }
+    
+  async getUserByEmailWithPassword(email) {
+    return userDao.getUserByEmail(email);
   }
 
   async getAllUsers() {
