@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import './styles/Cats.css';
+import CatCard from '../components/CatCard';
+import CatEditor from '../components/CatEditor';
+import '../styles/Cats.css';
 
 type Cat = {
     id: string;
@@ -12,20 +14,97 @@ type Cat = {
     imageUrl: string;
 };
 
-const CatsPage: React.FC = () => {
-    // In production, fetch this list from your DB/backend
+// Temporary admin flag; replace with real auth check as needed
+const isAdmin = false;
+
+const Cats: React.FC = () => {
     const [cats, setCats] = useState<Cat[]>([]);
     const [selectedCat, setSelectedCat] = useState<Cat | null>(null);
+    const [editingCat, setEditingCat] = useState<Cat | null>(null);
+    const [isAdding, setIsAdding] = useState(false);
 
     useEffect(() => {
-        // Replace with your API call!
         fetch('/api/cats')
             .then(resp => resp.json())
             .then(data => {
                 setCats(data);
-                setSelectedCat(data[0]);
+                setSelectedCat(data[0] || null);
+            })
+            .catch(() => {
+                setCats([]);
+                setSelectedCat(null);
             });
     }, []);
+
+    const handleDelete = async (catId: string) => {
+        if (!window.confirm('Are you sure you want to delete this cat?')) return;
+        const resp = await fetch(`/api/cats/${catId}`, { method: 'DELETE' });
+        if (resp.ok) {
+            const updatedCats = cats.filter(c => c.id !== catId);
+            setCats(updatedCats);
+            setSelectedCat(updatedCats[0] || null);
+            setEditingCat(null);
+        } else {
+            alert('Failed to delete cat.');
+        }
+    };
+
+    const handleStartEdit = (cat?: Cat) => {
+        if (cat) {
+            setEditingCat(cat);
+            setIsAdding(false);
+        } else {
+            setEditingCat({
+                id: '',
+                name: '',
+                age: '',
+                color: '',
+                favoriteGames: '',
+                specialty: '',
+                likes: '',
+                imageUrl: '',
+            });
+            setIsAdding(true);
+        }
+    };
+
+    const handleSave = async (catData: Cat) => {
+        if (isAdding) {
+            const resp = await fetch('/api/cats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(catData),
+            });
+            if (resp.ok) {
+                const newCat = await resp.json();
+                const updatedCats = [...cats, newCat];
+                setCats(updatedCats);
+                setSelectedCat(newCat);
+            } else {
+                alert('Failed to add cat.');
+            }
+        } else {
+            const resp = await fetch(`/api/cats/${catData.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(catData),
+            });
+            if (resp.ok) {
+                const updatedCats = cats.map(c => (c.id === catData.id ? catData : c));
+                setCats(updatedCats);
+                setSelectedCat(catData);
+            } else {
+                alert('Failed to update cat.');
+            }
+        }
+        setEditingCat(null);
+        setIsAdding(false);
+    };
+
+    const handleCancel = () => {
+        setEditingCat(null);
+        setIsAdding(false);
+    };
 
     return (
         <div className="cats-page">
@@ -36,33 +115,41 @@ const CatsPage: React.FC = () => {
                         <button
                             key={cat.id}
                             className={`cat-selector${selectedCat?.id === cat.id ? ' active' : ''}`}
-                            onClick={() => setSelectedCat(cat)}
+                            onClick={() => { setSelectedCat(cat); setEditingCat(null); }}
                         >
-                            <span className="cat-avatar">{/* Insert avatar or icon here, e.g., <img src={cat.imageUrl} /> */}</span>
                             {cat.name}
                         </button>
                     ))}
+                    {isAdmin && !editingCat && (
+                        <button onClick={() => handleStartEdit()} className="add-cat-button">
+                            + Add New Cat
+                        </button>
+                    )}
                 </div>
-                {selectedCat && (
-                    <div className="cat-info-card">
-                        <div className="cat-image">
-                            {/* Show cat image or placeholder */}
-                            <img src={selectedCat.imageUrl || '/default-cat.svg'} alt={selectedCat.name} />
+
+                <div className="cat-info-container">
+                    {editingCat ? (
+                        <CatEditor
+                            cat={editingCat}
+                            onSave={handleSave}
+                            onCancel={handleCancel}
+                        />
+                    ) : selectedCat ? (
+                        <CatCard
+                            cat={selectedCat}
+                            isAdmin={isAdmin}
+                            onEdit={() => handleStartEdit(selectedCat)}
+                            onDelete={() => handleDelete(selectedCat.id)}
+                        />
+                    ) : (
+                        <div className="cat-info-card no-cats">
+                            <span>No cats available</span>
                         </div>
-                        <div className="cat-details">
-                            <div><strong>Name:</strong> {selectedCat.name}</div>
-                            <div><strong>Age:</strong> {selectedCat.age}</div>
-                            <div><strong>Color:</strong> {selectedCat.color}</div>
-                            <div><strong>Favorite games:</strong> {selectedCat.favoriteGames}</div>
-                            <div><strong>Specialty:</strong> {selectedCat.specialty}</div>
-                            <div><strong>What he likes:</strong> {selectedCat.likes}</div>
-                            {/* Implement edit/remove as needed */}
-                        </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 
-export default CatsPage;
+export default Cats;
