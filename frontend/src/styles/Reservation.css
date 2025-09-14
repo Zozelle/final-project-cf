@@ -32,7 +32,6 @@
     color: #fff3e0;
 }
 
-
 .reservation-form {
     background: #f3d3a6;
     border: 1.5px solid #c68e3f;
@@ -97,4 +96,46 @@
     font-weight: 600;
     color: #895b3e;
     text-align: center;
+}
+
+.admin-booking-list {
+    margin-top: 16px;
+    width: 320px;
+    max-width: 90vw;
+    background: #f3d3a6;
+    border: 1.5px solid #c68e3f;
+    border-radius: 14px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 18px rgba(60, 24, 8, 0.08);
+    font-family: 'Playfair Display', serif;
+    color: #4a2b11;
+}
+
+.booking-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #c68e3f;
+    font-size: 1.1rem;
+}
+
+.booking-item:last-child {
+    border-bottom: none;
+}
+
+.booking-item button {
+    margin-left: 10px;
+    background: #b87f3a;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    color: #fff3e0;
+    cursor: pointer;
+    transition: background 0.25s;
+}
+
+.booking-item button:hover {
+    background: #a9702c;
 }

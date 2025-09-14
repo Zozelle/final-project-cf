@@ -112,8 +112,6 @@
     box-shadow: 3px 3px 12px rgba(139, 93, 31, 0.18);
 }
 
-/* Cat Editor Form Styles (Compact) */
-
 .cat-editor-form {
     background: #f1cba5;
     border: 1.5px solid #c68e3f;
@@ -180,8 +178,6 @@
 .cat-editor-form button[type="button"]:hover {
     background: #a06126;
 }
-
-/* Admin Action Buttons inside CatCard */
 
 .admin-action-buttons {
     margin-top: 20px;

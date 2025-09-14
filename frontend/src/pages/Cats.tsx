@@ -15,7 +15,7 @@ type Cat = {
 };
 
 // Temporary admin flag; replace with real auth check as needed
-const isAdmin = true;
+const isAdmin = false;
 
 const Cats: React.FC = () => {
     const [cats, setCats] = useState<Cat[]>([]);
