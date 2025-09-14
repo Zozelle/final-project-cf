@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/Reservation.css';
-
-type Booking = {
-    id?: string;
-    date: string;
-    time: string;
-    people: number;
-};
+import type { Booking } from '../types/Booking';
 
 type ReservationFormProps = {
     booking?: Booking;

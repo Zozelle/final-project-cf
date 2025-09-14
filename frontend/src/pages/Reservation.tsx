@@ -2,17 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/useAuth';
 import ReservationForm from '../components/ReservationForm';
 import '../styles/Reservation.css';
-
-type Booking = {
-    id: string;
-    date: string;
-    time: string;
-    people: number;
-};
+import type { Booking } from '../types/Booking';
 
 const Reservation: React.FC = () => {
-    const { isAuthenticated, token } = useAuth();
-
+    const { isAuthenticated, token, isAdmin } = useAuth();
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
 
@@ -38,7 +31,8 @@ const Reservation: React.FC = () => {
         );
     }
 
-    const handleDelete = async (id: string) => {
+    const handleDelete = async (id?: string) => {
+        if (!id) return;
         if (!window.confirm("Are you sure you want to delete this reservation?")) return;
         const res = await fetch(`/reservations/${id}`, {
             method: 'DELETE',
@@ -58,6 +52,9 @@ const Reservation: React.FC = () => {
 
     const handleSave = async (booking: Booking): Promise<{ success: boolean; message: string }> => {
         if (editingBooking) {
+            if (!booking.id) {
+                return { success: false, message: 'Booking ID is required' };
+            }
             const res = await fetch(`/reservations/${booking.id}`, {
                 method: 'PUT',
                 headers: {
@@ -123,7 +120,7 @@ const Reservation: React.FC = () => {
                     <div className="admin-booking-list">
                         {bookings.length === 0 && <p>No reservations found.</p>}
                         {bookings.map(b => (
-                            <div key={b.id} className="booking-item">
+                            <div key={b.id || `${b.date}-${b.time}-${b.people}`} className="booking-item">
                                 <span>{b.date} at {b.time} - {b.people} {b.people === 1 ? 'person' : 'people'}</span>
                                 <button onClick={() => handleEdit(b)}>Edit</button>
                                 <button onClick={() => handleDelete(b.id)}>Delete</button>
