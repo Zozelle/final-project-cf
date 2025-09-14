@@ -3,27 +3,26 @@ import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import AdminLogin from '../components/AdminLogin';
 import '../styles/Auth.css';
+import { useAuth } from '../context/useAuth';
 
 const Auth: React.FC = () => {
     const [isLogin, setIsLogin] = useState(true);
-    const [isAdminLogin, setIsAdminLogin] = useState(false)
-    const [user, setUser] = useState<null | { email: string }>(null);
+    const [isAdminLogin, setIsAdminLogin] = useState(false);
+    const { isAuthenticated, logout } = useAuth();
 
     const handleLoginSuccess = () => {
-        setUser({ email: 'user@example.com' });
         alert('Login successful!');
     };
 
     const handleSignUpSuccess = () => {
-        setUser({ email: 'newuser@example.com' });
         alert('Registration successful!');
     };
 
-    if (user) {
+    if (isAuthenticated) {
         return (
             <div className="auth-page">
                 <div className="auth-form" style={{ textAlign: 'center' }}>
-                    <h2>Welcome, {user.email}!</h2>
+                    <h2>Welcome!</h2>
                     <button
                         style={{
                             backgroundColor: '#b87f3a',
@@ -34,7 +33,7 @@ const Auth: React.FC = () => {
                             cursor: 'pointer',
                             marginTop: '20px',
                         }}
-                        onClick={() => setUser(null)}
+                        onClick={logout}
                     >
                         Logout
                     </button>

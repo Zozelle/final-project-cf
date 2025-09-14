@@ -9,9 +9,9 @@ type Booking = {
 };
 
 type ReservationFormProps = {
-    booking?: Booking;  // undefined when adding new
-    onSave: (booking: Booking) => void;
-    onCancel?: () => void;  // optional for normal user form
+    booking?: Booking;
+    onSave: (booking: Booking) => Promise<void> | void;
+    onCancel?: () => void;
     existingBookings?: Booking[];
 };
 
@@ -44,7 +44,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
         .filter(b => b.date === date && b.id !== booking?.id)
         .map(b => b.time);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!date || !time) return;
 
@@ -54,7 +54,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({
             time,
             people,
         };
-        onSave(bookingData);
+        await onSave(bookingData);
         setStatus('');
     };
 
