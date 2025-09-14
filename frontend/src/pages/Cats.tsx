@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CatCard from '../components/CatCard';
 import CatEditor from '../components/CatEditor';
 import '../styles/Cats.css';
+import { useAuth } from '../context/useAuth';
 
 type Cat = {
     id: string;
@@ -22,9 +23,11 @@ const Cats: React.FC = () => {
     const [selectedCat, setSelectedCat] = useState<Cat | null>(null);
     const [editingCat, setEditingCat] = useState<Cat | null>(null);
     const [isAdding, setIsAdding] = useState(false);
+    const { token } = useAuth();
 
     useEffect(() => {
-        fetch('/cats')
+        const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+        fetch('/cats', { headers })
             .then(resp => resp.json())
             .then(data => {
                 setCats(data);
@@ -34,11 +37,14 @@ const Cats: React.FC = () => {
                 setCats([]);
                 setSelectedCat(null);
             });
-    }, []);
+    }, [token]);
 
     const handleDelete = async (catId: string) => {
         if (!window.confirm('Are you sure you want to delete this cat?')) return;
-        const resp = await fetch(`/cats/${catId}`, { method: 'DELETE' });
+        const resp = await fetch(`/cats/${catId}`, {
+            method: 'DELETE',
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         if (resp.ok) {
             const updatedCats = cats.filter(c => c.id !== catId);
             setCats(updatedCats);
@@ -72,7 +78,10 @@ const Cats: React.FC = () => {
         if (isAdding) {
             const resp = await fetch('/cats', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify(catData),
             });
             if (resp.ok) {
@@ -86,7 +95,10 @@ const Cats: React.FC = () => {
         } else {
             const resp = await fetch(`/cats/${catData.id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify(catData),
             });
             if (resp.ok) {

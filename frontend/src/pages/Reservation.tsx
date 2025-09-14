@@ -4,26 +4,27 @@ import ReservationForm from '../components/ReservationForm';
 import '../styles/Reservation.css';
 
 type Booking = {
-    id: string;  // assuming backend provides ids for reservations
+    id: string;
     date: string;
     time: string;
     people: number;
 };
 
 const Reservation: React.FC = () => {
-    const { isAuthenticated, user } = useAuth();
-    const isAdmin = user?.role === 'admin';
+    const { isAuthenticated, token } = useAuth();
+    const isAdmin = false;
 
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
 
     useEffect(() => {
         if (!isAuthenticated) return;
-        fetch('/reservations')
+        const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+        fetch('/reservations', { headers })
             .then(res => res.json())
             .then(data => setBookings(data))
             .catch(() => setBookings([]));
-    }, [isAuthenticated]);
+    }, [isAuthenticated, token]);
 
     if (!isAuthenticated) {
         return (
@@ -42,7 +43,10 @@ const Reservation: React.FC = () => {
 
     const handleDelete = async (id: string) => {
         if (!window.confirm("Are you sure you want to delete this reservation?")) return;
-        const res = await fetch(`/reservations/${id}`, { method: 'DELETE' });
+        const res = await fetch(`/reservations/${id}`, {
+            method: 'DELETE',
+            headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         if (res.ok) {
             setBookings(bookings.filter(b => b.id !== id));
             if (editingBooking?.id === id) setEditingBooking(null);
@@ -59,7 +63,10 @@ const Reservation: React.FC = () => {
         if (editingBooking) {
             const res = await fetch(`/reservations/${booking.id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify(booking),
             });
             if (res.ok) {
@@ -72,7 +79,10 @@ const Reservation: React.FC = () => {
             // Add new reservation
             const res = await fetch('/reservations', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                },
                 body: JSON.stringify(booking),
             });
             if (res.ok) {

@@ -1,4 +1,4 @@
-// src/context/AuthContext.tsx
+/* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, type ReactNode } from 'react';
 
 interface AuthContextType {

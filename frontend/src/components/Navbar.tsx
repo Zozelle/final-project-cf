@@ -1,9 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import '../styles/Navbar.css';
+import { useAuth } from '../context/useAuth';
 
 const Navbar: React.FC = () => {
-    // const isAuthenticated = false; // Placeholder, replace with auth context later
+    const { isAuthenticated, logout } = useAuth();
 
     return (
         <nav className='home-navbar'>
@@ -28,16 +29,18 @@ const Navbar: React.FC = () => {
                         Meet our cats
                     </NavLink>
                 </li>
-                <li>
-                    <NavLink
-                        to="/reservation" end
-                        className={({ isActive }) =>
-                            isActive ? 'home-navbar-link active-link' : 'home-navbar-link'
-                        }
-                    >
-                        Book a visit
-                    </NavLink>
-                </li>
+                {isAuthenticated && (
+                    <li>
+                        <NavLink
+                            to="/reservation" end
+                            className={({ isActive }) =>
+                                isActive ? 'home-navbar-link active-link' : 'home-navbar-link'
+                            }
+                        >
+                            Book a visit
+                        </NavLink>
+                    </li>
+                )}
                 <li>
                     <NavLink
                         to="/menu" end
@@ -48,16 +51,24 @@ const Navbar: React.FC = () => {
                         Check the menu
                     </NavLink>
                 </li>
-                <li>
-                    <NavLink
-                        to="/login" end
-                        className={({ isActive }) =>
-                            isActive ? 'home-navbar-link active-link' : 'home-navbar-link'
-                    }
-                    >
-                        Login
-                    </NavLink>
-                </li>
+                {!isAuthenticated ? (
+                    <li>
+                        <NavLink
+                            to="/login" end
+                            className={({ isActive }) =>
+                                isActive ? 'home-navbar-link active-link' : 'home-navbar-link'
+                            }
+                        >
+                            Login
+                        </NavLink>
+                    </li>
+                ) : (
+                    <li>
+                        <button onClick={logout} className='home-navbar-link logout-button'>
+                            Logout
+                        </button>
+                    </li>
+                )}
             </ul>
         </nav>
     );

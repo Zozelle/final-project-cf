@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import '../styles/Auth.css';
+import { useAuth } from '../context/useAuth';
 
 interface LoginFormProps {
-    onLoginSuccess: () => void;
+    onLoginSuccess?: () => void;
 }
 
 const AdminLogin: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
@@ -10,6 +11,7 @@ const AdminLogin: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const { login } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -21,7 +23,10 @@ const AdminLogin: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
                 body: JSON.stringify({ email, password }),
             });
             if (!res.ok) throw new Error('Invalid credentials');
-            onLoginSuccess();
+            const data = await res.json();
+            const token = data.token;
+            login(token);
+            onLoginSuccess?.();
         } catch {
             setError('Login failed: Invalid email or password.');
         }
