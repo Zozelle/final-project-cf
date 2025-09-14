@@ -5,7 +5,8 @@ class ReservationController {
   // Create a reservation
   async createReservation(req, res, next) {
     try {
-      const reservation = await reservationService.createReservation(req.body);
+      const reservationData = { ...req.body, userId: req.user.id };
+      const reservation = await reservationService.createReservation(reservationData);
       res.status(201).json(reservation);
     } catch (error) {
       next(error);

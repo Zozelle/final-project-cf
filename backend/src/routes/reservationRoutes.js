@@ -9,9 +9,9 @@ const router = express.Router();
 router.post(
   '/',
   authenticateJWT,
-  body('userId').notEmpty().withMessage('User ID is required'),
-  body('visitDate').isISO8601().toDate().withMessage('Valid visit date is required'),
-  body('numGuests').isInt({ min: 1 }).withMessage('Number of guests must be at least 1'),
+  body('date').isISO8601().toDate().withMessage('Valid date is required'),
+  body('time').notEmpty().withMessage('Time is required'),
+  body('people').isInt({ min: 1 }).withMessage('Number of people must be at least 1'),
   validateRequest,
   reservationController.createReservation
 );
@@ -23,8 +23,9 @@ router.get('/user/:userId', authenticateJWT, reservationController.getReservatio
 router.put(
   '/:id',
   authenticateJWT,
-  body('visitDate').optional().isISO8601().toDate().withMessage('Valid visit date is required'),
-  body('numGuests').optional().isInt({ min: 1 }).withMessage('Number of guests must be at least 1'),
+  body('date').optional().isISO8601().toDate().withMessage('Valid date is required'),
+  body('time').optional().notEmpty().withMessage('Time is required'),
+  body('people').optional().isInt({ min: 1 }).withMessage('Number of people must be at least 1'),
   validateRequest,
   reservationController.updateReservation
 );
