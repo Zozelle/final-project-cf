@@ -12,7 +12,6 @@ type Booking = {
 
 const Reservation: React.FC = () => {
     const { isAuthenticated, token } = useAuth();
-    const isAdmin = false;
 
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
