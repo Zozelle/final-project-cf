@@ -33,12 +33,12 @@
     border-radius: 16px;
     padding: 6px 18px;
     margin-bottom: 2px;
-    border-bottom: 2px solid transparent; /* invisible by default */
+    border-bottom: 2px solid transparent;
 }
 
 .home-navbar-link.active-link {
-    border-bottom: 2px solid #d8a979;    /* visible solid line on active page */
-    color: #fff3e0;                      /* accent for active tab */
+    border-bottom: 2px solid #d8a979;
+    color: #fff3e0;
 }
 
 .home-navbar-link:hover,

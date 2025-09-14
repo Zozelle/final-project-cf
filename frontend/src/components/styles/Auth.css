@@ -6,7 +6,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #f3d3a6;
+    background: url('/images/loginbg.jpg') center/cover no-repeat;
     font-family: 'Playfair Display', serif;
     color: #4a2b11;
     padding: 24px 0;

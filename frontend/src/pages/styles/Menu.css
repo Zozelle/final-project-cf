@@ -1,8 +1,8 @@
 .menu-page {
     height: 100vh;
     width: 100vw;
-    background: #f3d3a6;
-    color: #4a2b11;
+    background: url('/images/menu-bg.jpg') center/cover no-repeat;
+    color: #fff3e0;
     font-family: 'Playfair Display', serif;
     display: flex;
     flex-direction: column;
@@ -34,7 +34,7 @@
 }
 
 .menu-category {
-    background: #f1cba5;
+    background: rgba(30, 18, 11, 0.8);
     border: 2px solid #c68e3f;
     box-shadow: 3px 3px 8px rgba(139, 93, 31, 0.25);
     border-radius: 12px;

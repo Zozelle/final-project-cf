@@ -33,13 +33,16 @@ const ReservationPage: React.FC = () => {
     if (!isAuthenticated) {
         return (
             <div className="reservation-page">
-                <h2 className="reservation-title">Please log in to book a visit</h2>
-                <p className="login-prompt">
-                    You must be logged in to make a reservation. Please <a href="/login">log in</a>.
-                </p>
+                <div className="reservation-guest-message">
+                    <h1 className="reservation-title">Please log in to book a visit</h1>
+                    <p className="login-prompt">
+                        You must be logged in to make a reservation. Please <a href="/login">log in</a>.
+                    </p>
+                </div>
             </div>
         );
     }
+
 
     const bookedTimes = bookings
         .filter(b => b.date === date)

@@ -82,7 +82,13 @@ const Auth: React.FC = () => {
                         <AdminLogin onLoginSuccess={handleLoginSuccess} />
                         <p className="auth-prompt">
                             Back to{' '}
-                            <span className="auth-prompt-link" onClick={() => setIsAdminLogin(false)}>
+                            <span
+                                className="auth-prompt-link"
+                                onClick={() => {
+                                    setIsAdminLogin(false);
+                                    setIsLogin(true);
+                                }}
+                            >
                                 User Login
                             </span>
                         </p>
