@@ -23,7 +23,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onSignUpSuccess }) => {
             const res = await fetch('/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password }),
+                body: JSON.stringify({ username, email, password }), //fix
             });
             if (!res.ok) throw new Error('Sign up failed');
             onSignUpSuccess();
